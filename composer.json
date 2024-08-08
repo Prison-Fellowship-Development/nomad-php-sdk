@@ -1,0 +1,37 @@
+{
+    "name": "prisonfellowship/nomad-php-sdk",
+    "description": "A PHP SDK for interacting with the Nomad Media API.",
+    "type": "library",
+    "require": {
+        "php": "^v8.1",
+        "saloonphp/saloon": "^v3.10.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5",
+        "laravel/pint": "^1.17",
+        "phpstan/phpstan": "^1.11"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Prisonfellowship\\NomadPhpSdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pedro Telleria",
+            "email": "guerrerocing@outlook.com"
+        }
+    ],
+    "scripts": {
+        "test": [
+            "phpunit --stop-on-failure"
+        ],
+        "lint": [
+            "pint"
+        ],
+        "analyse": [
+            "phpstan analyse"
+        ]
+    }
+}

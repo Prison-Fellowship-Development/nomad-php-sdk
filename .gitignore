@@ -1,0 +1,8 @@
+.idea
+vendor
+build
+clover.xml
+.phpactor.json
+.DS_Store
+.vscode
+.phpunit.cache
