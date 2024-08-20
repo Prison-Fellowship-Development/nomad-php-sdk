@@ -16,6 +16,9 @@ use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetDefaultSiteConfigReq
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetDynamicContentsRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMediaGroupRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMediaItemRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMyContentRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMyGroupRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetSiteConfigRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\MediaSearchRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ForgotPasswordRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ResetPasswordRequest;
@@ -104,6 +107,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param $request
+     * @return Response
      * @throws FatalRequestException
      * @throws RequestException
      */
@@ -137,6 +142,7 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -167,6 +173,7 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -214,6 +221,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $formData
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -229,6 +238,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $cookieId
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -244,6 +255,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $configId
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -259,6 +272,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $contentId
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -274,6 +289,8 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $groupId
+     * @return array
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -289,8 +306,10 @@ class NomadMediaConnector extends Connector
     }
 
     /**
-     * @throws NomadMediaException
+     * @param string $mediaItemId
+     * @return array
      * @throws FatalRequestException
+     * @throws NomadMediaException
      * @throws RequestException
      * @throws \JsonException
      */
@@ -304,8 +323,10 @@ class NomadMediaConnector extends Connector
     }
 
     /**
-     * @throws NomadMediaException
+     * @param array $searchParams
+     * @return array
      * @throws FatalRequestException
+     * @throws NomadMediaException
      * @throws RequestException
      * @throws \JsonException
      */
@@ -319,6 +340,58 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $contentId
+     * @return array
+     * @throws FatalRequestException
+     * @throws NomadMediaException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getMyContent(string $contentId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+
+        $response = $this->send(new GetMyContentRequest($contentId));
+        return $response->json();
+    }
+
+    /**
+     * @param string $groupId
+     * @return array
+     * @throws FatalRequestException
+     * @throws NomadMediaException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getMyGroup(string $groupId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+
+        $response = $this->send(new GetMyGroupRequest($groupId));
+        return $response->json();
+    }
+
+    /**
+     * @param string $configId
+     * @return array
+     * @throws FatalRequestException
+     * @throws NomadMediaException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getSiteConfig(string $configId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+
+        $response = $this->send(new GetSiteConfigRequest($configId));
+        return $response->json();
+    }
+
+    /**
+     * @param string $username
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
@@ -331,6 +404,9 @@ class NomadMediaConnector extends Connector
     }
 
     /**
+     * @param string $username
+     * @param string $token
+     * @param string $newPassword
      * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
