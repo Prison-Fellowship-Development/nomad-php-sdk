@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace PrisonFellowship\NomadPHPSDK\Requests\ContentManager;
 
+use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Traits\Body\HasStringBody;
 
-class GetDefaultSiteConfigRequest extends Request
+class GetDefaultSiteConfigRequest extends Request implements Hasbody
 {
-    protected Method $method = Method::GET;
+    use HasStringBody;
 
-    public function __construct(protected string $configId)
-    {
-    }
+    protected Method $method = Method::GET;
 
     public function resolveEndpoint(): string
     {
-        return "/api/media/default-site-config/{$this->configId}";
+        return '/api/media/config';
     }
 }
