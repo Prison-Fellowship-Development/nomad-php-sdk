@@ -25,6 +25,8 @@ use PrisonFellowship\NomadPHPSDK\Requests\Utility\ResetPasswordRequest;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
 use Saloon\Http\Connector;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Request;
 use Saloon\Http\Response;
 
 class NomadMediaConnector extends Connector
@@ -107,12 +109,12 @@ class NomadMediaConnector extends Connector
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return Response
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function send($request): Response
+    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
     {
         if ($this->debugMode) {
             $this->logRequest($request);
@@ -127,18 +129,43 @@ class NomadMediaConnector extends Connector
         return $response;
     }
 
-    private function logRequest($request): void
+    private function logRequest(Request $request): void
     {
-        echo 'Requesting: '.$request->resolveEndpoint()."\n";
-        echo 'Method: '.$request->getMethod()->value."\n";
-        echo 'Headers: '.json_encode($request->headers())."\n";
-        echo 'Body: '.json_encode($request->body())."\n";
+
+        $this->consoleDebug('Requesting', $request->resolveEndpoint());
+
+        $this->consoleDebug('Method', $request->getMethod()->value);
+
+        $this->consoleDebug('Headers', $request->headers()->all());
+
+        $this->consoleDebug('Body', $request->body()->all());
     }
 
     private function logResponse($response): void
     {
-        echo 'Response Status: '.$response->status()."\n";
-        echo 'Response Body: '.$response->body()."\n";
+
+        $this->consoleDebug('Response Status', $response->status());
+
+        $this->consoleDebug('Response Body', $response->body());
+    }
+
+    private function consoleDebug($title, $value): void
+    {
+        $colorStart = "\033[1;34m"; // ANSI code for bold blue text
+        $colorEnd = "\033[0m";      // ANSI code to reset the color
+
+        echo "\n";
+        echo str_repeat('-', 80)."\n";
+        echo "{$colorStart}DEBUG: $title{$colorEnd}\n"; // Color the title
+        echo str_repeat('-', 80)."\n";
+
+        if (is_array($value) || is_object($value)) {
+            echo print_r($value, true); // Print array or object in readable format
+        } else {
+            echo $value."\n"; // Print string or other scalar values
+        }
+
+        echo str_repeat('-', 80)."\n";
     }
 
     /**
@@ -155,7 +182,8 @@ class NomadMediaConnector extends Connector
         }
 
         $response = $this->send(new LoginRequest($this->username, $this->password));
-        $this->setToken($response['token']);
+        $this->setToken($response->json('token'));
+
         return $response->json();
     }
 
@@ -183,7 +211,7 @@ class NomadMediaConnector extends Connector
     {
         $this->ensureInitialized();
         $response = $this->send(new RefreshTokenRequest($this->getToken()));
-        $this->setToken($response['token']);
+        $this->setToken($response->json('token'));
         return $response->json();
     }
 
@@ -255,19 +283,13 @@ class NomadMediaConnector extends Connector
     }
 
     /**
-     * @param string $configId
-     * @return array
-     * @throws NomadMediaException
      * @throws FatalRequestException
      * @throws RequestException
      * @throws \JsonException
      */
-    public function getDefaultSiteConfig(string $configId): array
+    public function getDefaultSiteConfig(): array
     {
-        $this->validateApiType();
-        $this->ensureInitialized();
-
-        $response = $this->send(new GetDefaultSiteConfigRequest($configId));
+        $response = $this->send(new GetDefaultSiteConfigRequest());
         return $response->json();
     }
 
