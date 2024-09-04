@@ -15,13 +15,21 @@ class RefreshTokenRequest extends Request implements Hasbody
 
     protected Method $method = Method::POST;
 
-    public function __construct(protected string $refreshToken)
+    public function __construct(protected string $token, protected string $refreshToken)
     {
     }
 
     public function resolveEndpoint(): string
     {
         return '/api/account/refresh-token';
+    }
+
+    public function defaultHeaders(): array
+    {
+        return [
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type' => 'application/json',
+        ];
     }
 
     public function defaultBody(): array

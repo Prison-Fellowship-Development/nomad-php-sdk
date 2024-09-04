@@ -43,6 +43,10 @@ class NomadMediaConnector extends Connector
 
     protected ?string $password;
 
+    protected ?string $userSessionId;
+
+    protected ?string $refreshToken;
+
     /**
      * @param array $config
      */
@@ -79,6 +83,26 @@ class NomadMediaConnector extends Connector
     public function getToken(): ?string
     {
         return $this->token;
+    }
+
+    public function setUserSessionId(string|null $userSessionId): void
+    {
+        $this->userSessionId = $userSessionId;
+    }
+
+    public function getUserSessionId(): ?string
+    {
+        return $this->userSessionId;
+    }
+
+    public function setRefreshToken(string|null $refreshToken): void
+    {
+        $this->refreshToken = $refreshToken;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
     }
 
     /**
@@ -183,6 +207,7 @@ class NomadMediaConnector extends Connector
 
         $response = $this->send(new LoginRequest($this->username, $this->password));
         $this->setToken($response->json('token'));
+        $this->setUserSessionId($response->json('userSessionId'));
 
         return $response->json();
     }
@@ -196,7 +221,7 @@ class NomadMediaConnector extends Connector
     public function logout(): void
     {
         $this->ensureInitialized();
-        $this->send(new LogoutRequest($this->getToken()));
+        $this->send(new LogoutRequest($this->getToken(), $this->getUserSessionId()));
         $this->setToken(null);
     }
 
@@ -210,7 +235,7 @@ class NomadMediaConnector extends Connector
     public function refreshToken(): array
     {
         $this->ensureInitialized();
-        $response = $this->send(new RefreshTokenRequest($this->getToken()));
+        $response = $this->send(new RefreshTokenRequest($this->getToken(), $this->getRefreshToken()));
         $this->setToken($response->json('token'));
         return $response->json();
     }

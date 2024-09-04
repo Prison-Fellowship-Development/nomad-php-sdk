@@ -15,7 +15,7 @@ class LogoutRequest extends Request implements Hasbody
 
     protected Method $method = Method::POST;
 
-    public function __construct(protected string $token)
+    public function __construct(protected string $token, protected string $userSessionId)
     {
     }
 
@@ -29,6 +29,13 @@ class LogoutRequest extends Request implements Hasbody
         return [
             'Authorization' => 'Bearer '.$this->token,
             'Content-Type' => 'application/json',
+        ];
+    }
+
+    public function defaultBody(): array
+    {
+        return [
+            'userSessionId' => $this->userSessionId,
         ];
     }
 }
