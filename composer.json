@@ -20,7 +20,13 @@
     "authors": [
         {
             "name": "Pedro Telleria",
-            "email": "guerrerocing@outlook.com"
+            "email": "guerrerocing@outlook.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Mitch Martin",
+            "email": "mitch_martin@pfm.org",
+            "role": "Developer"
         }
     ],
     "scripts": {
