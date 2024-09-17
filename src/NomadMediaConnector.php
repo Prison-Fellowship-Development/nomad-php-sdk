@@ -488,6 +488,7 @@ class NomadMediaConnector extends Connector
      * @throws FatalRequestException
      * @throws RequestException
      * @throws \JsonException
+     * @throws NomadMediaException
      *
      * Field Names format:
      * $fieldNames = [
@@ -500,6 +501,8 @@ class NomadMediaConnector extends Connector
      */
     public function getFeaturedContent(array $fieldNames): array
     {
+        $this->validateApiType();
+        $this->ensureInitialized();
         $response = $this->send(new GetFeaturedContentRequest($this->getToken(), $fieldNames));
 
         return $response->json();
