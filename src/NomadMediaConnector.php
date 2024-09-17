@@ -11,9 +11,11 @@ use PrisonFellowship\NomadPHPSDK\Requests\Authenticator\RefreshTokenRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\ClearContinueWatchingRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\ClearWatchlistRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\CreateFormRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetAssetDetailRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetContentCookiesRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetDefaultSiteConfigRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetDynamicContentsRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetFeaturedContentRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMediaGroupRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMediaItemRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMyContentRequest;
@@ -463,5 +465,43 @@ class NomadMediaConnector extends Connector
     {
         $this->ensureInitialized();
         $this->send(new ResetPasswordRequest($username, $token, $newPassword));
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getAssetDetail(string $assetId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response  = $this->send(new GetAssetDetailRequest($this->getToken(), $assetId));
+
+        return $response->json();
+    }
+
+    /**
+     * @param array $fieldNames
+     * @return array
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     *
+     * Field Names format:
+     * $fieldNames = [
+     * "identifiers.assetType",
+     * "identifiers.createdDate",
+     * "identifiers.previewImageUrl",
+     * "identifiers.previewImageFullUrl",
+     * "identifiers.mediaTypeDisplay"
+     * ]
+     */
+    public function getFeaturedContent(array $fieldNames): array
+    {
+        $response = $this->send(new GetFeaturedContentRequest($this->getToken(), $fieldNames));
+
+        return $response->json();
     }
 }
