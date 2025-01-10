@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PrisonFellowship\NomadPHPSDK\Requests\ContentManager;
 
 use Saloon\Contracts\Body\HasBody;
@@ -34,6 +36,6 @@ class GetFeaturedContentRequest extends Request implements Hasbody
 
     public function resolveEndpoint(): string
     {
-        return "/api/portal/featured-content";
+        return '/api/portal/featured-content';
     }
 }

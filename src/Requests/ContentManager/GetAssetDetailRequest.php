@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PrisonFellowship\NomadPHPSDK\Requests\ContentManager;
 
 use Saloon\Contracts\Body\HasBody;
@@ -7,7 +9,7 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Traits\Body\HasStringBody;
 
-class GetAssetDetailRequest extends  Request implements Hasbody
+class GetAssetDetailRequest extends Request implements Hasbody
 {
     use HasStringBody;
 
