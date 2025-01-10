@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PrisonFellowship\NomadPHPSDK;
 
 use PrisonFellowship\NomadPHPSDK\Exceptions\NomadMediaException;
+use PrisonFellowship\NomadPHPSDK\Requests\Authenticator\GetOrCreateProfileRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Authenticator\LoginRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Authenticator\LogoutRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Authenticator\RefreshTokenRequest;
@@ -22,6 +23,10 @@ use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMyContentRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetMyGroupRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetSiteConfigRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\MediaSearchRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\SearchRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\AddUserContentAttributeRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\GetVideoTrackingRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\RemoveUserContentAttributeRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ForgotPasswordRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ResetPasswordRequest;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -401,7 +406,7 @@ class NomadMediaConnector extends Connector
         $this->validateApiType();
         $this->ensureInitialized();
 
-        $response = $this->send(new GetMyContentRequest($contentId));
+        $response = $this->send(new GetMyContentRequest($this->getToken(), $contentId));
         return $response->json();
     }
 
@@ -418,7 +423,7 @@ class NomadMediaConnector extends Connector
         $this->validateApiType();
         $this->ensureInitialized();
 
-        $response = $this->send(new GetMyGroupRequest($groupId));
+        $response = $this->send(new GetMyGroupRequest($this->getToken(), $groupId));
         return $response->json();
     }
 
@@ -477,7 +482,7 @@ class NomadMediaConnector extends Connector
     {
         $this->validateApiType();
         $this->ensureInitialized();
-        $response  = $this->send(new GetAssetDetailRequest($this->getToken(), $assetId));
+        $response = $this->send(new GetAssetDetailRequest($this->getToken(), $assetId));
 
         return $response->json();
     }
@@ -504,6 +509,82 @@ class NomadMediaConnector extends Connector
         $this->validateApiType();
         $this->ensureInitialized();
         $response = $this->send(new GetFeaturedContentRequest($this->getToken(), $fieldNames));
+
+        return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getOrCreateProfile(string $userId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send(new GetOrCreateProfileRequest($this->getToken(), $userId));
+
+        return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function search(array $body): array
+    {
+
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send((new SearchRequest($this->getToken()))->withBody($body));
+
+        return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function addUserContentAttribute(string $contentId, string $contentAttribute, string $profileId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send(new AddUserContentAttributeRequest($this->getToken(), $contentId, $contentAttribute, $profileId));
+
+        return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function removeUserContentAttribute(string $contentId, string $contentAttribute, string $profileId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send(new RemoveUserContentAttributeRequest($this->getToken(), $contentId, $contentAttribute, $profileId));
+
+        return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getVideoTracking(string $assetId, string $profileId, int $second, ?int $trackingEvent = null): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send(new GetVideoTrackingRequest($this->getToken(), $assetId, $profileId, $second, $trackingEvent));
 
         return $response->json();
     }
