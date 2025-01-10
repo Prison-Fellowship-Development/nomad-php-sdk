@@ -15,8 +15,16 @@ class GetMyGroupRequest extends Request implements Hasbody
 
     protected Method $method = Method::GET;
 
-    public function __construct(protected string $groupId)
+    public function __construct(protected string $token, protected string $groupId)
     {
+    }
+
+    public function defaultHeaders(): array
+    {
+        return [
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type' => 'application/json',
+        ];
     }
 
     public function resolveEndpoint(): string
