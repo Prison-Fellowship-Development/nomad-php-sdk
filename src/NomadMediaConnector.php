@@ -519,13 +519,21 @@ class NomadMediaConnector extends Connector
      * @throws RequestException
      * @throws \JsonException
      */
-    public function getOrCreateProfile(string $userId): array
+    public function getOrCreateProfile(string $userId): mixed
     {
         $this->validateApiType();
         $this->ensureInitialized();
         $response = $this->send(new GetOrCreateProfileRequest($this->getToken(), $userId));
 
-        return $response->json();
+
+        $responseBody = $response->body();
+        $decodedJson = json_decode($responseBody, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $decodedJson;
+        }
+
+        return $responseBody;
     }
 
     /**
