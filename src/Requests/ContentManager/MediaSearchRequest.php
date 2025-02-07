@@ -7,13 +7,13 @@ namespace PrisonFellowship\NomadPHPSDK\Requests\ContentManager;
 use Saloon\Contracts\Body\HasBody;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
-use Saloon\Traits\Body\HasStringBody;
+use Saloon\Traits\Body\HasJsonBody;
 
 class MediaSearchRequest extends Request implements Hasbody
 {
-    use HasStringBody;
+    use HasJsonBody;
 
-    protected Method $method = Method::GET;
+    protected Method $method = Method::POST;
 
     public function __construct(
         protected string $token,
@@ -34,7 +34,7 @@ class MediaSearchRequest extends Request implements Hasbody
         return '/api/media/search';
     }
 
-    public function defaultQuery(): array
+    public function defaultBody(): array
     {
         return $this->searchParams;
     }
