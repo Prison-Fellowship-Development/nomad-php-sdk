@@ -170,6 +170,8 @@ class NomadMediaConnector extends Connector
         $this->consoleDebug('Headers', $request->headers()->all());
 
         $this->consoleDebug('Body', $request->body()->all());
+
+        $this->consoleDebug('Query', $request->query()->all());
     }
 
     private function logResponse($response): void
@@ -389,7 +391,7 @@ class NomadMediaConnector extends Connector
         $this->validateApiType();
         $this->ensureInitialized();
 
-        $response = $this->send(new MediaSearchRequest($searchParams));
+        $response = $this->send(new MediaSearchRequest($this->getToken(), $searchParams));
         return $response->json();
     }
 
@@ -525,7 +527,6 @@ class NomadMediaConnector extends Connector
         $this->ensureInitialized();
         $response = $this->send(new GetOrCreateProfileRequest($this->getToken(), $userId));
 
-
         $responseBody = $response->body();
         $decodedJson = json_decode($responseBody, true);
 
@@ -588,12 +589,12 @@ class NomadMediaConnector extends Connector
      * @throws RequestException
      * @throws \JsonException
      */
-    public function getVideoTracking(string $assetId, string $profileId, int $second, ?int $trackingEvent = null): array
+    public function getVideoTracking(string $assetId, string $profileId, string $second, ?int $trackingEvent = null): string
     {
         $this->validateApiType();
         $this->ensureInitialized();
         $response = $this->send(new GetVideoTrackingRequest($this->getToken(), $assetId, $profileId, $second, $trackingEvent));
 
-        return $response->json();
+        return $response->body();
     }
 }

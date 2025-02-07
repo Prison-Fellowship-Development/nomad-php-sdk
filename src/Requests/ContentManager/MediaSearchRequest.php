@@ -15,8 +15,18 @@ class MediaSearchRequest extends Request implements Hasbody
 
     protected Method $method = Method::GET;
 
-    public function __construct(protected array $searchParams)
+    public function __construct(
+        protected string $token,
+        protected array $searchParams
+    ) {
+    }
+
+    public function defaultHeaders(): array
     {
+        return [
+            'Authorization' => 'Bearer '.$this->token,
+            'Content-Type' => 'application/json',
+        ];
     }
 
     public function resolveEndpoint(): string

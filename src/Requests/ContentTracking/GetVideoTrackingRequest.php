@@ -19,7 +19,7 @@ class GetVideoTrackingRequest extends Request implements Hasbody
         protected string $token,
         protected string $assetId,
         protected string $profileId,
-        protected int $second,
+        protected string $second,
         protected ?int $trackingEvent = null,
     ) {
     }
