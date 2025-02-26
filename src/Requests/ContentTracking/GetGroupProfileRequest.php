@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PrisonFellowship\NomadPHPSDK\Requests\ContentTracking;
 
 use Saloon\Contracts\Body\HasBody;
@@ -12,7 +14,6 @@ class GetGroupProfileRequest extends Request implements Hasbody
     use HasStringBody;
 
     protected Method $method = Method::GET;
-
 
     public function __construct(
         protected string $token,
