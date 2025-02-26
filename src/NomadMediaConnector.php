@@ -25,6 +25,7 @@ use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\GetSiteConfigRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\MediaSearchRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentManager\SearchRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\AddUserContentAttributeRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\GetGroupProfileRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\GetVideoTrackingRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\RemoveUserContentAttributeRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ForgotPasswordRequest;
@@ -596,5 +597,20 @@ class NomadMediaConnector extends Connector
         $response = $this->send(new GetVideoTrackingRequest($this->getToken(), $assetId, $profileId, $second, $trackingEvent));
 
         return $response->body();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function getGroupProfile(string $groupId, string $profileId): array
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $response = $this->send(new GetGroupProfileRequest($this->getToken(), $groupId, $profileId));
+
+        return $response->json();
     }
 }
