@@ -21,6 +21,7 @@ class GetVideoTrackingRequest extends Request implements Hasbody
         protected string $profileId,
         protected string $second,
         protected ?int $trackingEvent = null,
+        protected ?string $contentId = null,
     ) {
     }
 
@@ -42,6 +43,7 @@ class GetVideoTrackingRequest extends Request implements Hasbody
         return array_filter([
             'assetId' => $this->assetId,
             'trackingEvent' => $this->trackingEvent,
+            'contentId' => $this->contentId,
             'second' => $this->second,
             'profileId' => $this->profileId,
         ], fn ($value) => $value !== null);

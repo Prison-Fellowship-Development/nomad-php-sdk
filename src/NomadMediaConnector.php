@@ -146,7 +146,7 @@ class NomadMediaConnector extends Connector
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function send(Request $request, MockClient $mockClient = null, callable $handleRetry = null): Response
+    public function send(Request $request, ?MockClient $mockClient = null, ?callable $handleRetry = null): Response
     {
         if ($this->debugMode) {
             $this->logRequest($request);
@@ -590,11 +590,11 @@ class NomadMediaConnector extends Connector
      * @throws RequestException
      * @throws \JsonException
      */
-    public function getVideoTracking(string $assetId, string $profileId, string $second, ?int $trackingEvent = null): string
+    public function getVideoTracking(string $assetId, string $profileId, string $second, ?int $trackingEvent = null, ?string $contentId = null): string
     {
         $this->validateApiType();
         $this->ensureInitialized();
-        $response = $this->send(new GetVideoTrackingRequest($this->getToken(), $assetId, $profileId, $second, $trackingEvent));
+        $response = $this->send(new GetVideoTrackingRequest($this->getToken(), $assetId, $profileId, $second, $trackingEvent, $contentId));
 
         return $response->body();
     }
