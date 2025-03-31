@@ -28,6 +28,7 @@ use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\AddUserContentAttribut
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\GetGroupProfileRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\GetVideoTrackingRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\RemoveUserContentAttributeRequest;
+use PrisonFellowship\NomadPHPSDK\Requests\ContentTracking\RemoveWatchingRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ForgotPasswordRequest;
 use PrisonFellowship\NomadPHPSDK\Requests\Utility\ResetPasswordRequest;
 use Saloon\Exceptions\Request\FatalRequestException;
@@ -612,5 +613,18 @@ class NomadMediaConnector extends Connector
         $response = $this->send(new GetGroupProfileRequest($this->getToken(), $groupId, $profileId));
 
         return $response->json();
+    }
+
+    /**
+     * @throws NomadMediaException
+     * @throws FatalRequestException
+     * @throws RequestException
+     * @throws \JsonException
+     */
+    public function removeWatching(string $assetId, string $profileId): void
+    {
+        $this->validateApiType();
+        $this->ensureInitialized();
+        $this->send(new RemoveWatchingRequest($this->getToken(), $assetId, $profileId));
     }
 }
