@@ -354,12 +354,13 @@ class NomadMediaConnector extends Connector
      * @throws RequestException
      * @throws \JsonException
      */
-    public function getMediaGroup(string $groupId): array
+    public function getMediaGroup(string $groupId, string|array|null $filterIds = null): array
     {
         $this->validateApiType();
         $this->ensureInitialized();
 
-        $response = $this->send(new GetMediaGroupRequest($groupId));
+        $response = $this->send(new GetMediaGroupRequest($groupId, $filterIds));
+
         return $response->json();
     }
 
