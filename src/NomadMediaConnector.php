@@ -164,44 +164,19 @@ class NomadMediaConnector extends Connector
 
     private function logRequest(Request $request): void
     {
-
-        $this->consoleDebug('Requesting', $request->resolveEndpoint());
-
-        $this->consoleDebug('Method', $request->getMethod()->value);
-
-        $this->consoleDebug('Headers', $request->headers()->all());
-
-        $this->consoleDebug('Body', $request->body()->all());
-
-        $this->consoleDebug('Query', $request->query()->all());
+        ds($request->resolveEndpoint())->label('Requesting')->s('Request');
+        ds($request->getMethod()->value)->label('Method')->s('Request');
+        ds($request->headers()->all())->label('Headers')->s('Request');
+        ds($request->body()->all())->label('Body')->s('Request');
+        ds($request->query()->all())->label('Query')->s('Request');
     }
 
     private function logResponse($response): void
     {
-
-        $this->consoleDebug('Response Status', $response->status());
-
-        $this->consoleDebug('Response Body', $response->body());
+        ds($response->status())->label('Response Status')->s('Response');
+        ds($response->body())->label('Response Body')->s('Response');
     }
 
-    private function consoleDebug($title, $value): void
-    {
-        $colorStart = "\033[1;34m"; // ANSI code for bold blue text
-        $colorEnd = "\033[0m";      // ANSI code to reset the color
-
-        echo "\n";
-        echo str_repeat('-', 80)."\n";
-        echo "{$colorStart}DEBUG: $title{$colorEnd}\n"; // Color the title
-        echo str_repeat('-', 80)."\n";
-
-        if (is_array($value) || is_object($value)) {
-            echo print_r($value, true); // Print array or object in readable format
-        } else {
-            echo $value."\n"; // Print string or other scalar values
-        }
-
-        echo str_repeat('-', 80)."\n";
-    }
 
     /**
      * @return array
@@ -622,7 +597,7 @@ class NomadMediaConnector extends Connector
      * @throws RequestException
      * @throws \JsonException
      */
-    public function removeWatching(string $assetId, string $profileId): void
+     public function removeWatching(string $assetId, string $profileId): void
     {
         $this->validateApiType();
         $this->ensureInitialized();
