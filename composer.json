@@ -9,7 +9,8 @@
     "require-dev": {
         "laravel/pint": "^1.17",
         "phpstan/phpstan": "^1.11",
-        "pestphp/pest": "^2.35"
+        "pestphp/pest": "^2.35",
+        "laradumps/laradumps-core": "^3.0"
     },
     "license": "MIT",
     "autoload": {
