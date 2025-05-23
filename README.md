@@ -126,54 +126,40 @@ $connector->resetPassword($username, $token, $newPassword);
 
 ### Debug Mode
 
-If `debugMode` is set to `true` during initialization, the SDK will print API request and response details, making it easier to debug your integration. The debug information will be colorized and formatted for better readability.
+If `debugMode` is set to `true` during initialization, the SDK will send detailed API request and response information to **LaraDumps**, allowing you to debug visually in real time with a clean and organized interface.
 
 ```php
 $connector = new NomadMediaConnector([
     'serviceApiUrl' => 'https://api.example.com',
-    'debugMode' => true,  // Enable debug mode
+    'debugMode' => true,  // Enable debug mode with LaraDumps integration
 ]);
 ```
 
-When debug mode is enabled, the console output will look like this:
+When debug mode is enabled, each request and response will be sent to the **LaraDumps app** in a dedicated screen. For example:
 
-```bash
---------------------------------------------------------------------------------
-DEBUG: Requesting
---------------------------------------------------------------------------------
-/api/media/my-content
---------------------------------------------------------------------------------
-DEBUG: Method
---------------------------------------------------------------------------------
-GET
---------------------------------------------------------------------------------
-DEBUG: Headers
---------------------------------------------------------------------------------
-Array
-(
-    [Authorization] => Bearer token_here
-    [Content-Type] => application/json
-)
---------------------------------------------------------------------------------
-DEBUG: Body
---------------------------------------------------------------------------------
-Array
-(
-)
---------------------------------------------------------------------------------
-DEBUG: Response Status
---------------------------------------------------------------------------------
-200
---------------------------------------------------------------------------------
-DEBUG: Response Body
---------------------------------------------------------------------------------
-{
-    "id": "12345",
-    "title": "My Content"
-}
---------------------------------------------------------------------------------
-```
+- ✅ `Request` screen will show:
+  - Endpoint
+  - HTTP Method
+  - Headers
+  - Body
+  - Query parameters
 
+- ✅ `Response` screen will show:
+  - Status code
+  - Response body
+
+---
+
+### LaraDumps Setup
+
+To use this feature, you must install the **LaraDumps Desktop App**:
+
+1. Download it from the official repository:  
+   👉 [https://github.com/laradumps/app/releases](https://github.com/laradumps/app/releases)
+
+2. Install and run the app. It should run in the background and automatically receive logs.
+
+3. (Optional) You can open dedicated **screens** inside the app to organize logs, such as “Request”, “Response”, etc.
 
 ---
 
